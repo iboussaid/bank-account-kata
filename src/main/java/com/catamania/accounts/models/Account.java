@@ -1,6 +1,5 @@
 package com.catamania.accounts.models;
 
-import com.catamania.operations.enums.OperationType;
 import com.catamania.operations.interfaces.Operation;
 
 import java.util.ArrayList;
@@ -14,15 +13,16 @@ public class Account {
         this.balance = 0f;
         this.operations = new ArrayList<>();
     }
+
     public boolean addOperation(Operation operation) {
-        if (OperationType.DEPOSIT.equals(operation.type())) {
-            balance += operation.amount();
-            return operations.add(operation);
-        }
-        return false;
+        return operations.add(operation);
     }
 
     public float getBalance() {
         return balance;
+    }
+
+    public void setBalance(float balance) {
+        this.balance = balance;
     }
 }
