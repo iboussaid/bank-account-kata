@@ -1,14 +1,20 @@
 package com.catamania.operations.services;
 
-import com.catamania.operations.enums.OperationType;
 import com.catamania.operations.interfaces.Operation;
 
 public class OperationValidator {
+
+    public static final float ZERO = 0.0f;
+
     public boolean validateOperation(Operation operation) {
-        return operation != null && !isDepositWithNegativeAmount(operation);
+        return operation != null && !isAmountNegative(operation);
     }
 
-    private boolean isDepositWithNegativeAmount(Operation operation) {
-        return OperationType.DEPOSIT.equals(operation.type()) && operation.amount() <= 0;
+    public boolean validateBalance(float balance, float amount) {
+        return balance - amount >= ZERO;
+    }
+
+    private boolean isAmountNegative(Operation operation) {
+        return operation.amount() <= ZERO;
     }
 }

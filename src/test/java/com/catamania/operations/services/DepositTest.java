@@ -1,31 +1,30 @@
 package com.catamania.operations.services;
 
 import com.catamania.accounts.models.Account;
+import com.catamania.operations.interfaces.DepositInterface;
 import com.catamania.operations.interfaces.Operation;
 import com.catamania.operations.models.Deposit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
-class OperationsTest {
-    @Mock
+class DepositTest {
     OperationValidator operationValidator;
-    @InjectMocks
-    Operations operations;
+    DepositInterface depositOperations;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        operationValidator = Mockito.mock(OperationValidator.class);
         when(operationValidator.validateOperation(any(Operation.class))).thenReturn(true);
+        depositOperations = new Operations(operationValidator);
     }
 
     @Test
@@ -33,7 +32,7 @@ class OperationsTest {
     void makeADepositOf100() {
         Account clientAccount = new Account();
         Deposit depositOperation = new Deposit(100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
-        boolean result = operations.makeDeposit(depositOperation, clientAccount);
+        boolean result = depositOperations.makeDeposit(depositOperation, clientAccount);
         Assertions.assertTrue(result);
         Assertions.assertEquals(100f, clientAccount.getBalance());
     }
