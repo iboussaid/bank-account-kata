@@ -2,7 +2,7 @@ package com.catamania.operations.interfaces;
 
 import com.catamania.accounts.models.Account;
 
-public interface HistoryInterface {
+public interface StatementInterface {
     String accountStatement(Account clientAccount);
 
     default void printStatement(Account clientAccount) {

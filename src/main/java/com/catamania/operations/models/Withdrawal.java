@@ -9,4 +9,12 @@ public record Withdrawal(Float amount, LocalDateTime date) implements Operation 
     public Float calculateNewBalance(Float balance) {
         return balance - amount;
     }
+
+    @Override
+    public String toString() {
+        return "Operation: Withdrawal{" +
+                "date=" + date +
+                ", amount=" + amount +
+                '}';
+    }
 }

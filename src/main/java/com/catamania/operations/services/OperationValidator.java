@@ -4,7 +4,7 @@ import com.catamania.operations.interfaces.Operation;
 
 public class OperationValidator {
 
-    public static final float ZERO = 0.0f;
+    private static final float ZERO = 0.0f;
 
     public boolean validateOperation(Operation operation) {
         return operation != null && !isAmountNegative(operation);

@@ -9,4 +9,12 @@ public record Deposit(Float amount, LocalDateTime date) implements Operation {
     public Float calculateNewBalance(Float balance) {
         return balance + amount;
     }
+
+    @Override
+    public String toString() {
+        return "Operation: Deposit {" +
+                "date=" + date +
+                ", amount=" + amount +
+                '}';
+    }
 }
