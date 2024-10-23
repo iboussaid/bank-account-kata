@@ -32,16 +32,16 @@ class AccountStatementTest {
     @DisplayName("In order to check my operations As a bank client I want to see the history (operation, date, amount, balance) of my operations")
     void checkOperations() {
         Account clientAccount = new Account();
-        Operation depositOperation = new Deposit(100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
-        Operation depositOperation2 = new Deposit(100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
-        Operation depositOperation3 = new Deposit(100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
-        Operation withdrawalOperation = new Withdrawal(10f, LocalDateTime.of(2024, Month.OCTOBER, 23, 12, 0, 0));
-        Operation withdrawalOperation2 = new Withdrawal(100f, LocalDateTime.of(2024, Month.OCTOBER, 23, 12, 0, 0));
-        clientAccount.addOperation(depositOperation);
-        clientAccount.addOperation(depositOperation2);
-        clientAccount.addOperation(depositOperation3);
-        clientAccount.addOperation(withdrawalOperation);
-        clientAccount.addOperation(withdrawalOperation2);
+        Operation firstDeposit = new Deposit(100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
+        Operation secondDeposit = new Deposit(100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
+        Operation thirdDeposit = new Deposit(100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
+        Operation firstWithdrawal = new Withdrawal(10f, LocalDateTime.of(2024, Month.OCTOBER, 23, 12, 0, 0));
+        Operation secondWithdrawal = new Withdrawal(100f, LocalDateTime.of(2024, Month.OCTOBER, 23, 12, 0, 0));
+        clientAccount.addOperation(firstDeposit);
+        clientAccount.addOperation(secondDeposit);
+        clientAccount.addOperation(thirdDeposit);
+        clientAccount.addOperation(firstWithdrawal);
+        clientAccount.addOperation(secondWithdrawal);
         clientAccount.setBalance(190f);
         String result = historyOperations.accountStatement(clientAccount);
 

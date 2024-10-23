@@ -16,28 +16,23 @@ public class Operations implements ServiceApi {
 
     @Override
     public boolean makeDeposit(Deposit deposit, Account account) {
-        if (operationValidator.validateOperation(deposit)) {
-            return applyOperationToAccount(deposit, account);
-        }
-        return false;
+        return operationValidator.validateOperation(deposit) && applyOperationToAccount(deposit, account);
     }
 
     @Override
     public boolean makeWithdrawal(Withdrawal withdrawal, Account account) {
-        if (operationValidator.validateOperation(withdrawal) && operationValidator.validateBalance(account.getBalance(), withdrawal.amount())) {
-            return applyOperationToAccount(withdrawal, account);
-        }
-        return false;
+        return operationValidator.isWithdrawalPossibleForThisAccount(withdrawal, account)
+                && applyOperationToAccount(withdrawal, account);
+    }
+
+    @Override
+    public String accountStatement(Account clientAccount) {
+        return clientAccount.toString();
     }
 
     private boolean applyOperationToAccount(Operation operation, Account account) {
         Float balance = operation.calculateNewBalance(account.getBalance());
         account.setBalance(balance);
         return account.addOperation(operation);
-    }
-
-    @Override
-    public String accountStatement(Account clientAccount) {
-        return clientAccount.toString();
     }
 }
