@@ -1,5 +1,6 @@
 package com.catamania.operations.services;
 
+import com.catamania.accounts.models.Account;
 import com.catamania.operations.interfaces.Operation;
 import com.catamania.operations.models.Deposit;
 import com.catamania.operations.models.Withdrawal;
@@ -29,33 +30,54 @@ class OperationValidatorTest {
         Assertions.assertFalse(result);
     }
 
+
     @Test
     @DisplayName("my withdrawal should have a positive value - Nominal case")
     void testWithValidWithdrawal() {
-        Operation validDeposit = new Withdrawal(100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
-        boolean result = operationValidator.validateOperation(validDeposit);
+        Operation validWithdrawal = new Withdrawal(100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
+        boolean result = operationValidator.validateOperation(validWithdrawal);
         Assertions.assertTrue(result);
     }
 
     @Test
     @DisplayName("my withdrawal should have a positive value - case with negative value")
     void testWithInValidWithdrawal() {
-        Operation invalidDeposit = new Withdrawal(-100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
-        boolean result = operationValidator.validateOperation(invalidDeposit);
+        Operation invalidWithdrawal = new Withdrawal(-100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
+        boolean result = operationValidator.validateOperation(invalidWithdrawal);
         Assertions.assertFalse(result);
     }
-
+    @Test
+    @DisplayName("my operation should not be null")
+    void testWithNullOperation() {
+        boolean result = operationValidator.validateOperation(null);
+        Assertions.assertFalse(result);
+    }
     @Test
     @DisplayName("my balance should be positive after withdrawal - case with enough funds")
     void testWhenBalanceIsSufficient() {
-        boolean result = operationValidator.validateBalance(100f, 50f);
+        Withdrawal withdrawal = new Withdrawal(50f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
+        Account clientAccount= new Account();
+        clientAccount.setBalance(100f);
+        boolean result = operationValidator.isWithdrawalPossibleForThisAccount(withdrawal, clientAccount);
+        Assertions.assertTrue(result);
+    }
+    @Test
+    @DisplayName("my balance should be zero after withdrawal - case with amount equals to funds")
+    void testWhenBalanceIsSufficient_amountEqualToFunds() {
+        Withdrawal withdrawal = new Withdrawal(100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
+        Account clientAccount= new Account();
+        clientAccount.setBalance(100f);
+        boolean result = operationValidator.isWithdrawalPossibleForThisAccount(withdrawal, clientAccount);
         Assertions.assertTrue(result);
     }
 
     @Test
     @DisplayName("my balance should be positive after withdrawal - case with insufficient funds")
     void testWhenBalanceIsInsufficient() {
-        boolean result = operationValidator.validateBalance(100f, 500f);
+        Withdrawal withdrawal = new Withdrawal(500f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
+        Account clientAccount= new Account();
+        clientAccount.setBalance(100f);
+        boolean result = operationValidator.isWithdrawalPossibleForThisAccount(withdrawal, clientAccount);
         Assertions.assertFalse(result);
     }
 }

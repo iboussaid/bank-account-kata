@@ -1,13 +1,13 @@
 package com.catamania.operations.services;
 
-import com.catamania.operations.interfaces.DepositInterface;
+
 import com.catamania.accounts.models.Account;
 import com.catamania.operations.interfaces.Operation;
-import com.catamania.operations.interfaces.WithdrawalInterface;
+import com.catamania.operations.interfaces.ServiceApi;
 import com.catamania.operations.models.Deposit;
 import com.catamania.operations.models.Withdrawal;
 
-public class Operations implements DepositInterface, WithdrawalInterface {
+public class Operations implements ServiceApi {
     private final OperationValidator operationValidator;
 
     public Operations(OperationValidator operationValidator) {
@@ -16,18 +16,18 @@ public class Operations implements DepositInterface, WithdrawalInterface {
 
     @Override
     public boolean makeDeposit(Deposit deposit, Account account) {
-        if (operationValidator.validateOperation(deposit)) {
-            return applyOperationToAccount(deposit, account);
-        }
-        return false;
+        return operationValidator.validateOperation(deposit) && applyOperationToAccount(deposit, account);
     }
 
     @Override
     public boolean makeWithdrawal(Withdrawal withdrawal, Account account) {
-        if (operationValidator.validateOperation(withdrawal) && operationValidator.validateBalance(account.getBalance(), withdrawal.amount())) {
-            return applyOperationToAccount(withdrawal, account);
-        }
-        return false;
+        return operationValidator.isWithdrawalPossibleForThisAccount(withdrawal, account)
+                && applyOperationToAccount(withdrawal, account);
+    }
+
+    @Override
+    public String accountStatement(Account clientAccount) {
+        return clientAccount.toString();
     }
 
     private boolean applyOperationToAccount(Operation operation, Account account) {

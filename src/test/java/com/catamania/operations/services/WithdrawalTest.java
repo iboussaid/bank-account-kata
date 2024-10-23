@@ -24,18 +24,30 @@ class WithdrawalTest {
     void setUp() {
         operationValidator = Mockito.mock(OperationValidator.class);
         when(operationValidator.validateOperation(any(Operation.class))).thenReturn(true);
-        when(operationValidator.validateBalance(any(Float.class),any(Float.class))).thenReturn(true);
+        when(operationValidator.isWithdrawalPossibleForThisAccount(any(Withdrawal.class), any(Account.class))).thenReturn(true);
         withdrawalOperations = new Operations(operationValidator);
     }
 
     @Test
-    @DisplayName("In order to retrieve some or all of my savings As a bank client I want to make a withdrawal from my account")
+    @DisplayName("In order to retrieve some of my savings As a bank client I want to make a withdrawal from my account")
     void makeAWithdrawalOf100() {
         Account clientAccount = new Account();
         clientAccount.setBalance(200f);
-        Withdrawal depositOperation = new Withdrawal(100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
-        boolean result = withdrawalOperations.makeWithdrawal(depositOperation, clientAccount);
+        Withdrawal withdrawal = new Withdrawal(100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
+        boolean result = withdrawalOperations.makeWithdrawal(withdrawal, clientAccount);
         Assertions.assertTrue(result);
         Assertions.assertEquals(100f, clientAccount.getBalance());
+    }
+
+    @Test
+    @DisplayName("In order to retrieve all of my savings As a bank client I want to make a withdrawal from my account")
+    void makeAWithdrawalOfAllFunds() {
+        Account clientAccount = new Account();
+        clientAccount.setBalance(200f);
+        Withdrawal withdrawal = new Withdrawal(200f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
+        when(operationValidator.isWithdrawalPossibleForThisAccount(eq(withdrawal), eq(clientAccount))).thenCallRealMethod();
+        boolean result = withdrawalOperations.makeWithdrawal(withdrawal, clientAccount);
+        Assertions.assertTrue(result);
+        Assertions.assertEquals(0f, clientAccount.getBalance());
     }
 }
