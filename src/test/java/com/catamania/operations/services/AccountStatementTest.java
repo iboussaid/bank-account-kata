@@ -4,6 +4,7 @@ import com.catamania.accounts.models.Account;
 import com.catamania.operations.interfaces.HistoryInterface;
 import com.catamania.operations.interfaces.Operation;
 import com.catamania.operations.models.Deposit;
+import com.catamania.operations.models.Withdrawal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,13 +35,14 @@ class AccountStatementTest {
         Operation depositOperation = new Deposit(100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
         Operation depositOperation2 = new Deposit(100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
         Operation depositOperation3 = new Deposit(100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
-        Operation withdrawalOperation = new Deposit(10f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
-        Operation withdrawalOperation2 = new Deposit(100f, LocalDateTime.of(2024, Month.OCTOBER, 22, 12, 0, 0));
+        Operation withdrawalOperation = new Withdrawal(10f, LocalDateTime.of(2024, Month.OCTOBER, 23, 12, 0, 0));
+        Operation withdrawalOperation2 = new Withdrawal(100f, LocalDateTime.of(2024, Month.OCTOBER, 23, 12, 0, 0));
         clientAccount.addOperation(depositOperation);
         clientAccount.addOperation(depositOperation2);
         clientAccount.addOperation(depositOperation3);
         clientAccount.addOperation(withdrawalOperation);
         clientAccount.addOperation(withdrawalOperation2);
+        clientAccount.setBalance(190f);
         String result = historyOperations.accountStatement(clientAccount);
 
         Assertions.assertEquals("TODO", result);
