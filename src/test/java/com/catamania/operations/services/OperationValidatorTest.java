@@ -29,6 +29,7 @@ class OperationValidatorTest {
         Assertions.assertFalse(result);
     }
 
+
     @Test
     @DisplayName("my withdrawal should have a positive value - Nominal case")
     void testWithValidWithdrawal() {
@@ -45,10 +46,25 @@ class OperationValidatorTest {
         Assertions.assertFalse(result);
     }
 
+
     @Test
     @DisplayName("my balance should be positive after withdrawal - case with enough funds")
     void testWhenBalanceIsSufficient() {
         boolean result = operationValidator.validateBalance(100f, 50f);
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    @DisplayName("my operation should not be null")
+    void testWithNullOperation() {
+        boolean result = operationValidator.validateOperation(null);
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    @DisplayName("my balance should be zero after withdrawal - case with amount equals to funds")
+    void testWhenBalanceIsSufficient_amountEqualToFunds() {
+        boolean result = operationValidator.validateBalance(100f, 100f);
         Assertions.assertTrue(result);
     }
 
